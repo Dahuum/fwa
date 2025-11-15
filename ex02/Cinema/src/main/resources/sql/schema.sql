@@ -1,0 +1,29 @@
+DROP TABLE IF EXISTS images CASCADE;
+DROP TABLE IF EXISTS authentication_history CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE authentication_history (
+    id SERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ip_address VARCHAR(50),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE images (
+    id SERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    original_name VARCHAR(255) NOT NULL,
+    file_name VARCHAR(255) NOT NULL UNIQUE,
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
